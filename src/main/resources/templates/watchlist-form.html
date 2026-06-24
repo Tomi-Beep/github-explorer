@@ -1,0 +1,26 @@
+<section xmlns:th="http://www.thymeleaf.org" class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h1 class="h3 mb-1">Edit watchlist entry</h1>
+                <p class="text-secondary mb-4" th:text="${repository.getFullName()}">owner/repository</p>
+
+                <form th:action="@{/watchlist/edit/{id}(id=${repository.getId()})}" method="post">
+                    <div class="mb-3">
+                        <label class="form-label" for="tag">Tag</label>
+                        <input class="form-control" id="tag" type="text" name="tag"
+                               placeholder="For example: backend" th:value="${repository.getTag()}">
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label" for="note">Personal note</label>
+                        <textarea class="form-control" id="note" name="note" rows="5"
+                                  placeholder="Why did you save this repository?"
+                                  th:text="${repository.getNote()}"></textarea>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Save changes</button>
+                    <a class="btn btn-outline-secondary" th:href="@{/watchlist}">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

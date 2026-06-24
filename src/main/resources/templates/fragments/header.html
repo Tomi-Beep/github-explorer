@@ -1,0 +1,11 @@
+<header th:fragment="header" xmlns:th="http://www.thymeleaf.org">
+    <nav class="navbar navbar-dark bg-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand fw-semibold" th:href="@{/}">GitHub Explorer</a>
+            <div class="navbar-nav flex-row gap-3">
+                <a class="nav-link" th:href="@{/}">Search</a>
+                <a class="nav-link" th:href="@{/watchlist}">My Watchlist</a>
+            </div>
+        </div>
+    </nav>
+</header>

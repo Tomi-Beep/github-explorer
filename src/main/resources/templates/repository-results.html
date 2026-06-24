@@ -1,0 +1,64 @@
+<section xmlns:th="http://www.thymeleaf.org">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h1 class="h3 mb-1">Repository search</h1>
+            <p class="text-secondary mb-0">Find a public repository and add it to your local watchlist.</p>
+        </div>
+        <a class="btn btn-outline-secondary" th:href="@{/}">New search</a>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form th:action="@{/repositories}" method="get" class="row g-2">
+                <div class="col-md">
+                    <label class="visually-hidden" for="keyword">Keyword</label>
+                    <input class="form-control" id="keyword" type="text" name="keyword"
+                           th:value="${keyword}" placeholder="Search GitHub repositories" required>
+                </div>
+                <div class="col-md-auto">
+                    <button class="btn btn-primary w-100" type="submit">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="alert alert-danger" th:if="${error != null}" th:text="${error}">Error message</div>
+    <div class="alert alert-info" th:if="${error == null and repositories.isEmpty()}">No repositories found.</div>
+
+    <div class="card shadow-sm" th:if="${!repositories.isEmpty()}">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                <tr>
+                    <th>Repository</th>
+                    <th>Description</th>
+                    <th>Language</th>
+                    <th>Stars</th>
+                    <th>Owner</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="repository : ${repositories}">
+                    <td class="fw-semibold" th:text="${repository.getFullName()}">owner/repository</td>
+                    <td th:text="${repository.getDescription() == null ? 'No description' : repository.getDescription()}">Description</td>
+                    <td th:text="${repository.getLanguage() == null ? 'Not specified' : repository.getLanguage()}">Language</td>
+                    <td th:text="${repository.getStars()}">0</td>
+                    <td th:text="${repository.getOwner() == null ? 'Unknown' : repository.getOwner().getLogin()}">Owner</td>
+                    <td class="text-end text-nowrap">
+                        <a class="btn btn-sm btn-outline-primary"
+                           th:href="@{/repositories/{owner}/{name}(owner=${repository.getOwner().getLogin()},name=${repository.getName()})}">
+                            Details
+                        </a>
+                        <form class="d-inline"
+                              th:action="@{/repositories/save/{owner}/{name}(owner=${repository.getOwner().getLogin()},name=${repository.getName()})}"
+                              method="post">
+                            <button class="btn btn-sm btn-success" type="submit">Save</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>

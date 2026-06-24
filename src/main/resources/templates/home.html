@@ -1,0 +1,19 @@
+<section xmlns:th="http://www.thymeleaf.org" class="row justify-content-center">
+    <div class="col-md-8 col-lg-7">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h1 class="h3 mb-2">Explore public GitHub repositories</h1>
+                <p class="text-secondary mb-4">Search by a technology, topic, framework, or project name.</p>
+
+                <form th:action="@{/repositories}" method="get">
+                    <label class="form-label" for="keyword">What are you looking for?</label>
+                    <div class="input-group">
+                        <input class="form-control" id="keyword" type="text" name="keyword"
+                               placeholder="For example: spring boot" required>
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
