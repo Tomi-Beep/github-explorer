@@ -7,14 +7,23 @@
 
                 <form th:action="@{/watchlist/edit/{id}(id=${repository.getId()})}" method="post">
                     <div class="mb-3">
-                        <label class="form-label" for="tag">Tag</label>
+                        <label class="form-label" for="tag">Your tag</label>
                         <input class="form-control" id="tag" type="text" name="tag"
-                               placeholder="For example: backend" th:value="${repository.getTag()}">
+                               placeholder="For example: windows-theme" th:value="${repository.getTag()}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="category">Flag</label>
+                        <select class="form-select" id="category" name="category">
+                            <option th:each="category : ${categories}"
+                                    th:value="${category}"
+                                    th:selected="${repository.getCategory() == category}"
+                                    th:text="${category.getDisplayName()}">Category</option>
+                        </select>
                     </div>
                     <div class="mb-4">
-                        <label class="form-label" for="note">Personal note</label>
+                        <label class="form-label" for="note">Why I saved this</label>
                         <textarea class="form-control" id="note" name="note" rows="5"
-                                  placeholder="Why did you save this repository?"
+                                  placeholder="For example: great desktop UI inspiration, useful config files, nice theme screenshots..."
                                   th:text="${repository.getNote()}"></textarea>
                     </div>
                     <button class="btn btn-primary" type="submit">Save changes</button>

@@ -2,9 +2,16 @@
     <nav class="navbar navbar-dark bg-dark mb-4">
         <div class="container">
             <a class="navbar-brand fw-semibold" th:href="@{/}">GitHub Explorer</a>
-            <div class="navbar-nav flex-row gap-3">
+            <div class="navbar-nav flex-row gap-3 align-items-center">
                 <a class="nav-link" th:href="@{/}">Search</a>
                 <a class="nav-link" th:href="@{/watchlist}">My Watchlist</a>
+                <a class="nav-link" th:if="${session.currentUsername == null}" th:href="@{/login}">Login</a>
+                <a class="nav-link" th:if="${session.currentUsername == null}" th:href="@{/register}">Register</a>
+                <span class="navbar-text small" th:if="${session.currentUsername != null}"
+                      th:text="|Logged in as ${session.currentUsername}|">Logged in</span>
+                <form th:if="${session.currentUsername != null}" th:action="@{/logout}" method="post" class="mb-0">
+                    <button class="btn btn-sm btn-outline-light" type="submit">Logout</button>
+                </form>
             </div>
         </div>
     </nav>

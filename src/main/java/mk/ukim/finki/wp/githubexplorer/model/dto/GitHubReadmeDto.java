@@ -8,13 +8,20 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GitHubOwnerDto {
+public class GitHubReadmeDto {
 
-    private String login;
-
-    @JsonProperty("avatar_url")
-    private String avatarUrl;
+    private String name;
+    private String path;
+    private String content;
+    private String encoding;
 
     @JsonProperty("html_url")
     private String htmlUrl;
+
+    @JsonProperty("download_url")
+    private String downloadUrl;
+
+    private String text;
+    private String html;
+    private boolean truncated;
 }

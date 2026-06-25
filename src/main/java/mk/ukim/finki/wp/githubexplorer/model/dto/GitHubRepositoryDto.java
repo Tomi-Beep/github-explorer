@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -34,4 +37,27 @@ public class GitHubRepositoryDto {
 
     @JsonProperty("updated_at")
     private String updatedAt;
+
+    @JsonProperty("created_at")
+    private String createdAt;
+
+    @JsonProperty("pushed_at")
+    private String pushedAt;
+
+    @JsonProperty("default_branch")
+    private String defaultBranch;
+
+    @JsonProperty("watchers_count")
+    private Long watchers;
+
+    @JsonProperty("subscribers_count")
+    private Long subscribers;
+
+    private String homepage;
+    private Long size;
+    private Boolean fork;
+    private Boolean archived;
+    private String visibility;
+    private GitHubLicenseDto license;
+    private List<String> topics = new ArrayList<>();
 }

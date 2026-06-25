@@ -1,16 +1,40 @@
 <section xmlns:th="http://www.thymeleaf.org" class="row justify-content-center">
-    <div class="col-md-8 col-lg-7">
+    <div class="col-lg-9">
         <div class="card shadow-sm">
             <div class="card-body p-4">
                 <h1 class="h3 mb-2">Explore public GitHub repositories</h1>
                 <p class="text-secondary mb-4">Search by a technology, topic, framework, or project name.</p>
 
-                <form th:action="@{/repositories}" method="get">
-                    <label class="form-label" for="keyword">What are you looking for?</label>
-                    <div class="input-group">
+                <form th:action="@{/repositories}" method="get" class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label" for="keyword">Keyword</label>
                         <input class="form-control" id="keyword" type="text" name="keyword"
-                               placeholder="For example: spring boot" required>
-                        <button class="btn btn-primary" type="submit">Search</button>
+                               placeholder="For example: windows theme">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label" for="language">Primary language</label>
+                        <input class="form-control" id="language" type="text" name="language"
+                               placeholder="Java, CSS, C++">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label" for="topic">GitHub topic</label>
+                        <input class="form-control" id="topic" type="text" name="topic"
+                               placeholder="theme, desktop">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label" for="minStars">Minimum stars</label>
+                        <input class="form-control" id="minStars" type="number" min="0" name="minStars" placeholder="100">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label" for="pageSize">Results per page</label>
+                        <select class="form-select" id="pageSize" name="pageSize">
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 d-flex align-items-end">
+                        <button class="btn btn-primary w-100" type="submit">Search repositories</button>
                     </div>
                 </form>
             </div>

@@ -2,9 +2,25 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
         <div>
             <h1 class="h3 mb-1">My watchlist</h1>
-            <p class="text-secondary mb-0">Repositories saved locally for later.</p>
+            <p class="text-secondary mb-0">Repositories saved to your own local account.</p>
         </div>
         <a class="btn btn-primary" th:href="@{/}">Search repositories</a>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form th:action="@{/watchlist}" method="get" class="row g-2 align-items-end">
+                <div class="col-md-5">
+                    <label class="form-label" for="tag">Filter by your tag</label>
+                    <input class="form-control" id="tag" type="text" name="tag" th:value="${tag}"
+                           placeholder="backend, desktop, windows-theme">
+                </div>
+                <div class="col-md-auto">
+                    <button class="btn btn-outline-primary" type="submit">Filter</button>
+                    <a class="btn btn-outline-secondary" th:href="@{/watchlist}">Clear</a>
+                </div>
+            </form>
+        </div>
     </div>
 
     <div class="alert alert-info" th:if="${repositories.isEmpty()}">
@@ -17,10 +33,12 @@
                 <thead class="table-light">
                 <tr>
                     <th>Repository</th>
-                    <th>Language</th>
+                    <th>Primary language</th>
                     <th>Stars</th>
+                    <th>Saved on</th>
                     <th>Tag</th>
-                    <th>Note</th>
+                    <th>Flag</th>
+                    <th>Why I saved this</th>
                     <th class="text-end">Actions</th>
                 </tr>
                 </thead>
@@ -31,18 +49,31 @@
                            th:text="${repository.getFullName()}" target="_blank">owner/repository</a>
                     </td>
                     <td th:text="${repository.getLanguage() == null ? 'Not specified' : repository.getLanguage()}">Language</td>
-                    <td th:text="${repository.getStars()}">0</td>
+                    <td>
+                        <div><span th:text="${repository.getStars()}">0</span> now</div>
+                        <div class="small text-secondary"><span th:text="${repository.getStarsWhenSaved()}">0</span> when saved</div>
+                        <span class="badge text-bg-success" th:if="${repository.getStarsDifference() > 0}"
+                              th:text="|+${repository.getStarsDifference()}|">+0</span>
+                        <span class="badge text-bg-secondary" th:if="${repository.getStarsDifference() == 0}">0</span>
+                        <span class="badge text-bg-danger" th:if="${repository.getStarsDifference() < 0}"
+                              th:text="${repository.getStarsDifference()}">-1</span>
+                    </td>
+                    <td th:text="${repository.getSavedAt() == null ? 'Unknown' : repository.getSavedAt()}">Saved at</td>
                     <td>
                         <span class="badge text-bg-secondary"
                               th:if="${repository.getTag() != null and !repository.getTag().isBlank()}"
                               th:text="${repository.getTag()}">Tag</span>
                         <span class="text-secondary" th:if="${repository.getTag() == null or repository.getTag().isBlank()}">None</span>
                     </td>
+                    <td th:text="${repository.getCategory() == null ? 'Not set' : repository.getCategory().getDisplayName()}">Flag</td>
                     <td th:text="${repository.getNote() == null or repository.getNote().isBlank() ? 'No note' : repository.getNote()}">Note</td>
                     <td class="text-end text-nowrap">
                         <a class="btn btn-sm btn-outline-primary" th:href="@{/watchlist/edit/{id}(id=${repository.getId()})}">
                             Edit
                         </a>
+                        <form class="d-inline" th:action="@{/watchlist/refresh/{id}(id=${repository.getId()})}" method="post">
+                            <button class="btn btn-sm btn-outline-secondary" type="submit">Refresh stars</button>
+                        </form>
                         <form class="d-inline" th:action="@{/watchlist/delete/{id}(id=${repository.getId()})}" method="post">
                             <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
                         </form>

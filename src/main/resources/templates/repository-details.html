@@ -1,4 +1,55 @@
 <section xmlns:th="http://www.thymeleaf.org">
+    <style>
+        .readme-content > :first-child {
+            margin-top: 0;
+        }
+
+        .readme-content > :last-child {
+            margin-bottom: 0;
+        }
+
+        .readme-content h1 {
+            font-size: 1.45rem;
+            margin-bottom: 1rem;
+        }
+
+        .readme-content h2 {
+            font-size: 1.2rem;
+            margin-top: 1.5rem;
+        }
+
+        .readme-content img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 0.375rem;
+        }
+
+        .readme-content pre {
+            padding: 1rem;
+            overflow: auto;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 0.375rem;
+        }
+
+        .readme-content code {
+            color: #212529;
+        }
+
+        .readme-content table {
+            width: 100%;
+            margin-bottom: 1rem;
+            border-collapse: collapse;
+        }
+
+        .readme-content th,
+        .readme-content td {
+            padding: 0.5rem;
+            border: 1px solid #dee2e6;
+        }
+    </style>
+
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h1 class="h3 mb-0">Repository details</h1>
         <a class="btn btn-outline-secondary" th:href="@{/}">New search</a>
@@ -8,30 +59,107 @@
 
     <div class="card shadow-sm" th:if="${repository != null}">
         <div class="card-body p-4">
-            <h2 class="h4 mb-1" th:text="${repository.getFullName()}">owner/repository</h2>
-            <p class="text-secondary mb-4" th:text="${repository.getDescription() == null ? 'No description' : repository.getDescription()}">
-                Description
-            </p>
+            <div class="d-flex gap-3 align-items-start mb-3">
+                <img th:if="${repository.getOwner() != null and repository.getOwner().getAvatarUrl() != null}"
+                     th:src="${repository.getOwner().getAvatarUrl()}" alt="Owner avatar" width="56" height="56" class="rounded">
+                <div>
+                    <h2 class="h4 mb-1" th:text="${repository.getFullName()}">owner/repository</h2>
+                    <p class="text-secondary mb-0" th:text="${repository.getDescription() == null ? 'No description' : repository.getDescription()}">
+                        Description
+                    </p>
+                </div>
+            </div>
+
+            <div class="mb-4" th:if="${repository.getTopics() != null and !repository.getTopics().isEmpty()}">
+                <span class="badge rounded-pill text-bg-info me-1" th:each="topic : ${repository.getTopics()}" th:text="${topic}">topic</span>
+            </div>
+
+            <section class="border rounded bg-light p-3 mb-4">
+                <div class="d-flex justify-content-between align-items-center gap-3 mb-3">
+                    <h3 class="h5 mb-0">What the repository says about itself</h3>
+                    <a class="btn btn-sm btn-outline-secondary text-nowrap"
+                       th:if="${readme != null and readme.getHtmlUrl() != null}"
+                       th:href="${readme.getHtmlUrl()}" target="_blank">Full README</a>
+                </div>
+
+                <div th:if="${readme == null}" class="alert alert-secondary mb-0">
+                    No README is available for this repository.
+                </div>
+
+                <div th:if="${readme != null}" class="readme-content bg-white border rounded p-3" th:utext="${readme.getHtml()}">
+                    README content
+                </div>
+            </section>
 
             <dl class="row mb-4">
                 <dt class="col-sm-3">Owner</dt>
-                <dd class="col-sm-9" th:text="${repository.getOwner() == null ? 'Unknown' : repository.getOwner().getLogin()}">owner</dd>
+                <dd class="col-sm-9">
+                    <a th:if="${repository.getOwner() != null and repository.getOwner().getHtmlUrl() != null}"
+                       th:href="${repository.getOwner().getHtmlUrl()}" target="_blank"
+                       th:text="${repository.getOwner().getLogin()}">owner</a>
+                    <span th:if="${repository.getOwner() == null or repository.getOwner().getHtmlUrl() == null}">Unknown</span>
+                </dd>
 
-                <dt class="col-sm-3">Language</dt>
+                <dt class="col-sm-3">Primary language</dt>
                 <dd class="col-sm-9" th:text="${repository.getLanguage() == null ? 'Not specified' : repository.getLanguage()}">language</dd>
 
                 <dt class="col-sm-3">Stars</dt>
                 <dd class="col-sm-9" th:text="${repository.getStars()}">0</dd>
 
+                <dt class="col-sm-3">Watchers</dt>
+                <dd class="col-sm-9" th:text="${repository.getWatchers() == null ? 0 : repository.getWatchers()}">0</dd>
+
                 <dt class="col-sm-3">Forks</dt>
                 <dd class="col-sm-9" th:text="${repository.getForks()}">0</dd>
 
                 <dt class="col-sm-3">Open issues</dt>
-                <dd class="col-sm-9" th:text="${repository.getOpenIssuesCount()}">0</dd>
+                <dd class="col-sm-9" th:text="${repository.getOpenIssuesCount() == null ? 0 : repository.getOpenIssuesCount()}">0</dd>
+
+                <dt class="col-sm-3">License</dt>
+                <dd class="col-sm-9" th:text="${repository.getLicense() == null ? 'No license information' : repository.getLicense().getName()}">License</dd>
+
+                <dt class="col-sm-3">Homepage</dt>
+                <dd class="col-sm-9">
+                    <a th:if="${repository.getHomepage() != null and !repository.getHomepage().isBlank()}"
+                       th:href="${repository.getHomepage()}" target="_blank" th:text="${repository.getHomepage()}">Homepage</a>
+                    <span th:if="${repository.getHomepage() == null or repository.getHomepage().isBlank()}">No homepage</span>
+                </dd>
+
+                <dt class="col-sm-3">Repository size</dt>
+                <dd class="col-sm-9" th:text="${repository.getSize() == null ? 'Unknown' : repository.getSize() + ' KB'}">size</dd>
+
+                <dt class="col-sm-3">Created</dt>
+                <dd class="col-sm-9" th:text="${repository.getCreatedAt() == null ? 'Unknown' : repository.getCreatedAt()}">date</dd>
+
+                <dt class="col-sm-3">Last pushed</dt>
+                <dd class="col-sm-9" th:text="${repository.getPushedAt() == null ? 'Unknown' : repository.getPushedAt()}">date</dd>
 
                 <dt class="col-sm-3">Last updated</dt>
                 <dd class="col-sm-9" th:text="${repository.getUpdatedAt()}">date</dd>
+
+                <dt class="col-sm-3">Archived</dt>
+                <dd class="col-sm-9" th:text="${repository.getArchived() == null or !repository.getArchived() ? 'No' : 'Yes'}">No</dd>
             </dl>
+
+            <div class="mb-4" th:if="${languages != null and !languages.isEmpty()}">
+                <h3 class="h5">Languages used</h3>
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered w-auto">
+                        <thead>
+                        <tr>
+                            <th>Language</th>
+                            <th>Bytes</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="entry : ${languages}">
+                            <td th:text="${entry.key}">Language</td>
+                            <td th:text="${entry.value}">0</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
             <a class="btn btn-outline-secondary me-2" th:href="${repository.getHtmlUrl()}" target="_blank">Open on GitHub</a>
             <form class="d-inline"

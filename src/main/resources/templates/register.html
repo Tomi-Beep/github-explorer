@@ -1,0 +1,33 @@
+<section xmlns:th="http://www.thymeleaf.org" class="row justify-content-center">
+    <div class="col-md-7 col-lg-5">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h1 class="h3 mb-2">Register</h1>
+                <p class="text-secondary mb-4">Create a simple local account for your personal watchlist.</p>
+
+                <div class="alert alert-danger" th:if="${error != null}" th:text="${error}">Error</div>
+
+                <form th:action="@{/register}" method="post">
+                    <div class="mb-3">
+                        <label class="form-label" for="name">Name</label>
+                        <input class="form-control" id="name" type="text" name="name" th:value="${name}" placeholder="Optional">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="username">Username</label>
+                        <input class="form-control" id="username" type="text" name="username" th:value="${username}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="password">Password</label>
+                        <input class="form-control" id="password" type="password" name="password" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label" for="repeatedPassword">Repeat password</label>
+                        <input class="form-control" id="repeatedPassword" type="password" name="repeatedPassword" required>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Register</button>
+                    <a class="btn btn-outline-secondary" th:href="@{/login}">I already have an account</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
