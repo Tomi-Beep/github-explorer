@@ -100,20 +100,8 @@
                     <span th:if="${repository.getOwner() == null or repository.getOwner().getHtmlUrl() == null}">Unknown</span>
                 </dd>
 
-                <dt class="col-sm-3">Primary language</dt>
-                <dd class="col-sm-9" th:text="${repository.getLanguage() == null ? 'Not specified' : repository.getLanguage()}">language</dd>
-
                 <dt class="col-sm-3">Stars</dt>
                 <dd class="col-sm-9" th:text="${repository.getStars()}">0</dd>
-
-                <dt class="col-sm-3">Watchers</dt>
-                <dd class="col-sm-9" th:text="${repository.getWatchers() == null ? 0 : repository.getWatchers()}">0</dd>
-
-                <dt class="col-sm-3">Forks</dt>
-                <dd class="col-sm-9" th:text="${repository.getForks()}">0</dd>
-
-                <dt class="col-sm-3">Open issues</dt>
-                <dd class="col-sm-9" th:text="${repository.getOpenIssuesCount() == null ? 0 : repository.getOpenIssuesCount()}">0</dd>
 
                 <dt class="col-sm-3">License</dt>
                 <dd class="col-sm-9" th:text="${repository.getLicense() == null ? 'No license information' : repository.getLicense().getName()}">License</dd>
@@ -131,14 +119,8 @@
                 <dt class="col-sm-3">Created</dt>
                 <dd class="col-sm-9" th:text="${repository.getCreatedAt() == null ? 'Unknown' : repository.getCreatedAt()}">date</dd>
 
-                <dt class="col-sm-3">Last pushed</dt>
-                <dd class="col-sm-9" th:text="${repository.getPushedAt() == null ? 'Unknown' : repository.getPushedAt()}">date</dd>
-
                 <dt class="col-sm-3">Last updated</dt>
                 <dd class="col-sm-9" th:text="${repository.getUpdatedAt()}">date</dd>
-
-                <dt class="col-sm-3">Archived</dt>
-                <dd class="col-sm-9" th:text="${repository.getArchived() == null or !repository.getArchived() ? 'No' : 'Yes'}">No</dd>
             </dl>
 
             <div class="mb-4" th:if="${languages != null and !languages.isEmpty()}">
