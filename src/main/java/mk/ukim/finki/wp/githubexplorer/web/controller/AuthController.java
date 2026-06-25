@@ -42,7 +42,7 @@ public class AuthController {
             AppUser user = userService.login(username, password);
             session.setAttribute("currentUserId", user.getId());
             session.setAttribute("currentUsername", user.getUsername());
-            return redirect == null || redirect.isBlank() ? "redirect:/watchlist" : "redirect:" + redirect;
+            return redirectAfterAuthentication(redirect);
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
             model.addAttribute("username", username);
@@ -53,7 +53,11 @@ public class AuthController {
     }
 
     @GetMapping("/register")
-    public String getRegisterPage(Model model) {
+    public String getRegisterPage(
+            @RequestParam(required = false) String redirect,
+            Model model
+    ) {
+        model.addAttribute("redirect", redirect);
         model.addAttribute("bodyContent", "register");
         return "master-template";
     }
@@ -64,6 +68,7 @@ public class AuthController {
             @RequestParam String password,
             @RequestParam String repeatedPassword,
             @RequestParam(required = false) String name,
+            @RequestParam(required = false) String redirect,
             HttpSession session,
             Model model
     ) {
@@ -71,11 +76,12 @@ public class AuthController {
             AppUser user = userService.register(username, password, repeatedPassword, name);
             session.setAttribute("currentUserId", user.getId());
             session.setAttribute("currentUsername", user.getUsername());
-            return "redirect:/watchlist";
+            return redirectAfterAuthentication(redirect);
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
             model.addAttribute("username", username);
             model.addAttribute("name", name);
+            model.addAttribute("redirect", redirect);
             model.addAttribute("bodyContent", "register");
             return "master-template";
         }
@@ -85,5 +91,12 @@ public class AuthController {
     public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/";
+    }
+
+    private String redirectAfterAuthentication(String redirect) {
+        if (redirect == null || redirect.isBlank() || !redirect.startsWith("/") || redirect.startsWith("//")) {
+            return "redirect:/watchlist";
+        }
+        return "redirect:" + redirect;
     }
 }

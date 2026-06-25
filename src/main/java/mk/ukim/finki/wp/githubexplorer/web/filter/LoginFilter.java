@@ -24,10 +24,7 @@ public class LoginFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
         if (needsLogin(httpRequest) && !isLoggedIn(httpRequest)) {
-            String redirect = httpRequest.getRequestURI();
-            if (httpRequest.getQueryString() != null) {
-                redirect += "?" + httpRequest.getQueryString();
-            }
+            String redirect = redirectAfterLogin(httpRequest);
 
             httpResponse.sendRedirect(httpRequest.getContextPath()
                     + "/login?redirect="
@@ -46,5 +43,19 @@ public class LoginFilter implements Filter {
     private boolean isLoggedIn(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         return session != null && session.getAttribute("currentUserId") != null;
+    }
+
+    private String redirectAfterLogin(HttpServletRequest request) {
+        String path = request.getRequestURI();
+
+        if (path.startsWith("/repositories/save/")) {
+            return path.replaceFirst("/repositories/save", "/repositories");
+        }
+
+        String redirect = path;
+        if (request.getQueryString() != null) {
+            redirect += "?" + request.getQueryString();
+        }
+        return redirect;
     }
 }
