@@ -172,11 +172,11 @@ public class GitHubRepositoryServiceImpl implements GitHubRepositoryService {
         }
 
         if (language != null && !language.isBlank()) {
-            query.add("language:" + language.trim());
+            query.add("language:" + quoteSearchValue(language));
         }
 
         if (topic != null && !topic.isBlank()) {
-            query.add("topic:" + topic.trim());
+            query.add("topic:" + quoteSearchValue(topic));
         }
 
         if (minStars != null && minStars > 0) {
@@ -184,5 +184,9 @@ public class GitHubRepositoryServiceImpl implements GitHubRepositoryService {
         }
 
         return query.toString();
+    }
+
+    private String quoteSearchValue(String value) {
+        return "\"" + value.trim().replace("\"", "") + "\"";
     }
 }
